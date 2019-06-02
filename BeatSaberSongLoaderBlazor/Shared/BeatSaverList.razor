@@ -1,0 +1,55 @@
+﻿@using BeatSaberSongLoaderBlazor.Data
+@inject BeatSaverScraperService BeatSaverScraper
+@inject SongsLoaderService SongsLoader
+
+<style>
+
+</style>
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        @{
+            @if (!(Items.Count() == 0))
+            {
+                var itemList = Items.ToList();
+                for (int i = 0; i < itemList.Count(); i++)
+                {
+                    var DownloadLink = itemList[i].DownloadLink;
+                    <div class="col-auto mb-3 card-deck">
+                        <div class="card" style="width: 18rem;">
+                            <img class="card-img-top" src="@itemList[i].PictureSrc" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@itemList[i].SongName</h5>
+
+                            </div>
+                            <div class="card-footer">
+                                <div>
+                                    <button class="btn btn-primary" value="@DownloadLink" onclick="@(e => DownloadSong(DownloadLink))">Download Song</button>
+                                </div>
+                                <div>
+                                    <a href="@itemList[i].BeatSaverUrl" target="_blank">See on BeatSaver.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                    <h2>No song found</h2>
+            }
+            }
+        </div>
+</div>
+
+
+
+
+
+    @functions {
+        [Parameter] IEnumerable<BeatSaverScraperService.BeatSaverSong> Items { get; set; }
+
+        public async void DownloadSong(string DownloadLink)
+        {
+            await base.InvokeAsync(() => BeatSaverScraper.DownloadSong(DownloadLink));
+        }
+    }

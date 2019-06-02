@@ -1,0 +1,78 @@
+﻿@page "/LoadSongsToQuest"
+@using BeatSaberSongLoaderBlazor.Data
+@inject SongsLoaderService SongsLoader
+@inject IJSRuntime jsRuntime
+
+<h1>Load Songs To Quest</h1>
+
+<body>
+    <div>
+        <ProgressBar></ProgressBar>
+        <div class="row">
+            <div class="col-sm">
+                <h4>PC Beat Saber Custom Songs</h4>
+                <table class="table table-bordered table-striped" id="AvailableSongsTable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Path</th>
+                            <th class="text-center">Song Name</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="col-sm">
+                <div class="center-block" style="margin-top:20%; position:center;">
+                    <button class="btn btn-primary" onclick="@TransferSongs">Transfer to Quest Load Folder</button>
+                </div>
+                
+            </div>
+
+
+            <div class="col-sm">
+                <h4>Quest Beat Saber Custom Songs to Load</h4>
+                <table class="table table-bordered table-striped" id="SongsToLoadTable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Path</th>
+                            <th class="text-center">Song Name</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+</body>
+
+
+<link href="lib/DataTables/datatables.min.css" rel="stylesheet" />
+
+
+@functions {
+
+    protected override void OnInit()
+    {
+        SongsLoader.LoadSongs();
+    }
+
+    protected override void OnAfterRender()
+    {
+        LoadDataTables();
+    }
+
+    public void LoadDataTables()
+    {
+
+        jsRuntime.InvokeAsync<object>("LoadDataTables");
+    }
+
+    public async Task TransferSongs()
+    {
+        var SelectedSongs = await jsRuntime.InvokeAsync<string[]>("GetSelectedSongsInAvailableSongsTable");
+
+        SongsLoader.TransferSongsToQuestSongDir(SelectedSongs);
+        SongsLoader.LoadSongs();
+    }
+}
