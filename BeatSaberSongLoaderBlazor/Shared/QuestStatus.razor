@@ -1,0 +1,46 @@
+﻿@using BeatSaberSongLoaderBlazor.Data
+@inject QuestStatusService questStatus
+
+<style>
+    .oi-circle-check {
+  fill: green;
+  color: green;
+}
+    .oi-circle-x {
+  fill: red;
+  color: red;
+}
+</style>
+
+@if (Connected)
+{
+    <NavLink class="nav-link" href="QuestStatus">
+        <span class="oi oi-circle-check"></span> @StatusText
+    </NavLink>
+}
+else
+{
+    <NavLink class="nav-link" href="QuestStatus">
+        <span class="oi oi-circle-x"></span> @StatusText
+    </NavLink>
+}
+
+
+@functions{
+
+    string StatusText = "";
+    bool Connected = false;
+
+    protected override void OnInit()
+    {
+        questStatus.ExecuteAsync();
+        questStatus.QuestStatusEvent += StatusUpdatedQuestStatusEvent;
+    }
+
+    void StatusUpdatedQuestStatusEvent(object sender, QuestStatusService.QuestStatusEventArgs e)
+    {
+        StatusText = e.Status;
+        Connected = e.Connected;
+        base.Invoke(StateHasChanged);
+    }
+}

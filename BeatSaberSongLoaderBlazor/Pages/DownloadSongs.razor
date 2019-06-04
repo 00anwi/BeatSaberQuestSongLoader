@@ -10,8 +10,6 @@
 
         <div>
             <h1>Download Songs</h1>
-
-
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Search" onkeyup="@KeyUp" bind="@SearchInput" aria-label="SearchInput" />
                 <div class="input-group-append">
@@ -22,38 +20,29 @@
             <button type="button" class="btn btn-primary btn-lg btn-block" onclick="@(e => GetSongFromURL("https://beatsaver.com/browse/downloads"))">Top Downloads</button>
             <button type="button" class="btn btn-primary btn-lg btn-block" onclick="@(e => GetSongFromURL("https://beatsaver.com/browse/played"))">Most Played</button>
             <button type="button" class="btn btn-primary btn-lg btn-block" onclick="@(e => DownloadAll())">Download All</button>
-
             <BeatSaverList Items="@BeatSaberSongs" />
+            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="@(e => LoadMoreSongs())">Load More Songs</button>
+            <br/>
         </div>
     </body>
-
 
 
 @functions {
 
     string SearchInput;
     List<BeatSaverScraperService.BeatSaverSong> BeatSaberSongs;
-    public bool RunScrollCheck = false;
 
     protected override async Task OnInitAsync()
     {
         BeatSaberSongs = BeatSaverScraper.BeatSaverSongsList;
 
         await BeatSaverScraper.GetSongsFromURL("https://beatsaver.com/browse/newest");
-
-        RunScrollCheck = false;
-    }
-
-    protected override void OnAfterRender()
-    {
-        RunScrollCheck = true;
-        LoadMoreSongsFomJS();
     }
 
     private async Task Search()
     {
         await BeatSaverScraper.Search(SearchInput);
-        base.Invoke(StateHasChanged);
+        await base.Invoke(StateHasChanged);
     }
 
     private async Task KeyUp(UIKeyboardEventArgs e)
@@ -61,39 +50,27 @@
         if (e.Key == "Enter")
         {
             await BeatSaverScraper.Search(SearchInput);
-            base.Invoke(StateHasChanged);
+            await base.Invoke(StateHasChanged);
         }
     }
 
     private async Task GetSongFromURL(string URL)
     {
         await BeatSaverScraper.GetSongsFromURL(URL);
-        base.Invoke(StateHasChanged);
-        await jsRuntime.InvokeAsync<bool>("ResetScroll");
+        await base.Invoke(StateHasChanged);
     }
 
     public async Task DownloadAll()
     {
         await BeatSaverScraper.DownloadAllSongs();
-        base.Invoke(StateHasChanged);
-        await jsRuntime.InvokeAsync<bool>("ResetScroll");
+        await base.Invoke(StateHasChanged);
     }
 
 
-    public async Task LoadMoreSongsFomJS()
+    public async Task LoadMoreSongs()
     {
-        while (RunScrollCheck)
-        {
-            var Test = await jsRuntime.InvokeAsync<bool>("CheckScroll");
-
-            if (Test)
-            {
-                await BeatSaverScraper.LoadMoreSongs();
-                base.Invoke(StateHasChanged);
-            }
-
-            await Task.Delay(100);
-        }
+      await BeatSaverScraper.LoadMoreSongs();
+      await base.Invoke(StateHasChanged);
     }
 }
 

@@ -37,6 +37,9 @@ namespace BeatSaberSongLoaderBlazor
 
             services.AddSingleton<SongsLoaderService>();
             services.AddSingleton<BeatSaverScraperService>();
+            services.AddSingleton<InitializeService>();
+
+            services.AddSingleton<QuestStatusService>();
 
             services.Configure<FolderSettings>(Configuration.GetSection("FolderSettings"));
             services.ConfigureWritable<FolderSettings>(Configuration.GetSection("FolderSettings"));

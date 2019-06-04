@@ -1,0 +1,62 @@
+﻿@page "/QuestStatus"
+@using BeatSaberSongLoaderBlazor.Data
+@inject QuestStatusService statusService
+
+<div>
+    <ul>
+        <li>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Model</label>
+                </div>
+                <div class="col-md-4">
+                    @statusService.questDeviceInfo.Model
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Name</label>
+                </div>
+                <div class="col-md-4">
+                    @statusService.questDeviceInfo.Name
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Product</label>
+                </div>
+                <div class="col-md-4">
+                    @statusService.questDeviceInfo.Product
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Serial</label>
+                </div>
+                <div class="col-md-4">
+                    @statusService.questDeviceInfo.Serial
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>State</label>
+                </div>
+                <div class="col-md-4">
+                    @statusService.questDeviceInfo.State
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+@functions{
+
+}

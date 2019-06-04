@@ -153,36 +153,43 @@ namespace BeatSaberSongLoaderBlazor.Data
         {
             var songList = new List<SongData>();
 
-            string[] Infofiles = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(f => f.Contains("info.dat") || f.Contains("info.json")).ToArray();
-
-            foreach (var file in Infofiles)
+            if (Directory.Exists(path))
             {
-                var filepath = Directory.GetParent(file).FullName.ToString();
-                string songName = null;
+                string[] Infofiles = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(f => f.Contains("info.dat") || f.Contains("info.json")).ToArray();
 
-                if(Path.GetExtension(file).ToLowerInvariant() == ".dat")
+                foreach (var file in Infofiles)
                 {
-                    songName = ParseNewInfoFileAndReturnSongName(file, filepath);
-                }
-                else
-                {
-                    songName = ParseOldInfoFileAndReturnSongName(file, filepath);
-                }
+                    var filepath = Directory.GetParent(file).FullName.ToString();
+                    string songName = null;
 
-                if (!String.IsNullOrEmpty(songName))
-                {
-                    var anySong = songList.Where(s => s.SongName.Equals(songName, StringComparison.InvariantCultureIgnoreCase));
-
-                    if (!anySong.Any())
+                    if (Path.GetExtension(file).ToLowerInvariant() == ".dat")
                     {
-                        var songData = new SongData
+                        songName = ParseNewInfoFileAndReturnSongName(file, filepath);
+                    }
+                    else
+                    {
+                        songName = ParseOldInfoFileAndReturnSongName(file, filepath);
+                    }
+
+                    if (!String.IsNullOrEmpty(songName))
+                    {
+                        var anySong = songList.Where(s => s.SongName.Equals(songName, StringComparison.InvariantCultureIgnoreCase));
+
+                        if (!anySong.Any())
                         {
-                            SongFolder = filepath,
-                            SongName = songName
-                        };
-                        songList.Add(songData);
+                            var songData = new SongData
+                            {
+                                SongFolder = filepath,
+                                SongName = songName
+                            };
+                            songList.Add(songData);
+                        }
                     }
                 }
+            }
+            else
+            {
+                songList.Add(new SongData { SongName = $"Directory does not exist \"{path}\" check folder settings" });
             }
 
             return songList;

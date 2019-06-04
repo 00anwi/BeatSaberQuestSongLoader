@@ -12,6 +12,14 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+tools/
+Java/
+SongsToLoad/
+apk/
+assets/
+backup/
+temp/
+
 
 # Build results
 [Dd]ebug/

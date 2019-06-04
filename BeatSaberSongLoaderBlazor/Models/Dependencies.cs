@@ -7,20 +7,15 @@ namespace BeatSaberSongLoaderBlazor.Models
 {
     public class Dependencies
     {
-        public List<Dependencie> dependencies { get; set; }
+        public IEnumerable<Dependencie> Dependencie { get; set; }
     }
 
     public class Dependencie
     {
-        public string DependencieName { get; set; }
-        public DependencieSettings DependencieSettings { get; set; }
-    }
-
-    public class DependencieSettings
-    {
+        public string Name { get; set; }
         public string DownloadURLWindows { get; set; }
-        public string DownlaodURLLinux { get; set; }
-        public string DownloadURLMAC { get; set; }
+        public string DownloadURLLinux { get; set; }
+        public string DownloadURLOSX { get; set; }
         public string Folder { get; set; }
     }
 }

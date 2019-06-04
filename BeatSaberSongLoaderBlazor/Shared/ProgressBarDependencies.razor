@@ -1,0 +1,27 @@
+﻿@using BeatSaberSongLoaderBlazor.Data
+@inject InitializeService Initialize
+
+<div class="progress">
+    <div class="progress-bar progress-bar-info active" role="progressbar" aria-valuenow="@Progress" aria-valuemin="0" aria-valuemax="100" style="width:@Progress%">
+        @DependecieName
+    </div>
+</div>
+
+
+@functions {
+
+    string Progress = "0";
+    string DependecieName = "";
+    protected override void OnInit()
+    {
+        Initialize.ProgressBarDependencieUpdatedEvent += ProgressBarDependencieUpdated;
+    }
+
+    void ProgressBarDependencieUpdated(object sender, InitializeService.ProgressBarDependencieUpdatedEventArgs e)
+    {
+        Progress = e.ProgressBar;
+        DependecieName = e.DependecieName;
+        base.Invoke(StateHasChanged);
+    }
+
+}

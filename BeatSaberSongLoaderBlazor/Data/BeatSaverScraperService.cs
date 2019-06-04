@@ -15,16 +15,18 @@ namespace BeatSaberSongLoaderBlazor.Data
 {
     public class BeatSaverScraperService
     {
-        public List<BeatSaverSong> BeatSaverSongsList = new List<BeatSaverSong>();
         private readonly IOptions<FolderSettings> _config;
-        private string SongsLoadedURL;
-        private int CurrentPage = 0;
-        public string ProgressBar = "0";
 
         public BeatSaverScraperService(IOptions<FolderSettings> config = null)
         {
             _config = config;
         }
+
+
+        public List<BeatSaverSong> BeatSaverSongsList = new List<BeatSaverSong>();
+        private string SongsLoadedURL;
+        private int CurrentPage = 0;
+        public string ProgressBar = "0";
 
         public async Task Search(string SearchString)
         {

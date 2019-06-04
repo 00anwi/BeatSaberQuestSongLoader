@@ -1,6 +1,7 @@
 ﻿@using BeatSaberSongLoaderBlazor.Data
 @inject BeatSaverScraperService BeatSaverScraper
 @inject SongsLoaderService SongsLoader
+@inject InitializeService Intializer
 
 <div class="progress" style="position:fixed; z-index: 99; top:0; right:0; text-align:center; left:0; height:10px;">
     <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="@Progress" aria-valuemin="0" aria-valuemax="100" style="width:@Progress%">
@@ -15,6 +16,7 @@
     {
         BeatSaverScraper.ProgressBarUpdatedEvent += ProgressBarUpdatedBeatSaverScraper;
         SongsLoader.ProgressBarUpdatedEvent += ProgressBarUpdatedSongsLoader;
+        Intializer.ProgressBarUpdatedEvent += ProgressBarUpdatedIntializer;
     }
 
     void ProgressBarUpdatedBeatSaverScraper(object sender, BeatSaverScraperService.ProgressBarUpdatedEventArgs e)
@@ -24,6 +26,11 @@
     }
 
     void ProgressBarUpdatedSongsLoader(object sender, SongsLoaderService.ProgressBarUpdatedEventArgs e)
+    {
+        Progress = e.ProgressBar;
+        base.Invoke(StateHasChanged);
+    }
+        void ProgressBarUpdatedIntializer(object sender, InitializeService.ProgressBarUpdatedEventArgs e)
     {
         Progress = e.ProgressBar;
         base.Invoke(StateHasChanged);
